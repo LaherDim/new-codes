@@ -1,0 +1,33 @@
+﻿The core codes here is taken as an example to obtain points of interest of the bank category within the Kunming Free Trade Area.
+(a0, b0, a1, b1 are the latitude and longitude range of Kunming.)
+import os
+import json
+import urllib2
+lat_0=a0
+lon_0=b0
+lat_1=a1
+lon_1=b1
+las=1
+ak=‘lqrldKDOUtHUuHzW20HDdsE4dOkkvbiF’
+keyword='银行'
+push=r'F:\codes\POIdata.txt'
+f=open(push,'a')
+lat_count=int((lat_1-lat_0)/las+1)
+lon_count=int((lon_1-lon_0)/las+1)
+for lat_c in range(0,lat_count):
+    lat_b1=lat_0+las*lat_c
+    for lon_c in range(0,lon_count):
+        lon_b1=lon_0+las*lon_c
+        for i in range(0,20):
+            page_num=str(i)
+            url='http://api.map.baidu.com/place/v2/search?query='keyword'& bounds='+str(lat_b1)+','+str(lon_b1)+','+str(lat_b1+las)+','+str(lon_b1+las)+'&page_size=20&page_num='+str(page_num)+'&output=json&ak='+ak
+            response = urllib2.urlopen(url2)
+            data=json.load(response)
+            for item in data['results']:
+                jadd=item['address']
+                jlon=item['location']['lng']
+                jlat=item['location']['lat']
+                jname=item['name']            
+                j_str=jname+','+str(jlat)+','+str(jlon)+','+jadd+'\n'
+                f.write(j_str)
+f.close()
